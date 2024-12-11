@@ -89,9 +89,10 @@
                                         echo "<td>" . $row['renter_id'] . "</td>";
                                         echo "<td>";
                                         //if a button is commented then it needs to be worked on
-                                            echo "<a href='viewRenter.php?movie_id=". $row['movie_id']."' title='View Renter' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
+                                           echo "<a href='viewRenter.php?movie_id=". $row['movie_id']."' title='View Renter' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
                                            echo "<a href='viewCast.php?movie_id=". $row['movie_id']."' title='View Cast' data-toggle='tooltip'><span class='glyphicon glyphicon-user'></span></a>";
                                            echo "<a href='deleteMovie.php?movie_id=". $row['movie_id'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
+                                           echo "<a href='updateMovie.php?movie_id=". $row['movie_id'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";	
                                         echo "</td>";
                                     echo "</tr>";
                                 }
@@ -130,8 +131,7 @@
                                         echo "<td>" . $row['movie_id'] . "</td>";
                                         echo "<td>";
                                         //updated these to work for renter (hopefully)
-                                        echo "<a href='updateRenter.php?renter_id=". $row['renter_id'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";	
-                                        echo "</td>";
+                                       echo "</td>";
                                     echo "</tr>";
                                 }
                                 echo "</tbody>";                            
