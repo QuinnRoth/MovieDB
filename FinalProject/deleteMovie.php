@@ -2,48 +2,51 @@
 require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if movie_id is set and valid
     if (isset($_POST["movie_id"]) && !empty(trim($_POST["movie_id"]))) {
         $movie_id = trim($_POST["movie_id"]);
 
-        // Prepare a delete statement
-        $sql = "DELETE FROM Movies WHERE movie_id = ?";
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            // Bind variables to the prepared statement
-            mysqli_stmt_bind_param($stmt, "s", $movie_id);
+        // Delete movie and update Renter table
+        $delete_movie_sql = "DELETE FROM Movies WHERE movie_id = ?";
+        $update_renter_sql = "UPDATE Renter SET movie_id = NULL WHERE movie_id = ?";
 
-            // Execute the prepared statement
-            if (mysqli_stmt_execute($stmt)) {
-                // Redirect to the landing page
-                header("location: index.php");
-                exit();
+        // Prepare and execute the DELETE query
+        if ($stmt1 = mysqli_prepare($link, $delete_movie_sql)) {
+            mysqli_stmt_bind_param($stmt1, "s", $movie_id);
+            if (mysqli_stmt_execute($stmt1)) {
+                // Prepare and execute the UPDATE query
+                if ($stmt2 = mysqli_prepare($link, $update_renter_sql)) {
+                    mysqli_stmt_bind_param($stmt2, "s", $movie_id);
+                    if (mysqli_stmt_execute($stmt2)) {
+                        // Redirect to index page
+                        header("location: index.php");
+                        exit();
+                    } else {
+                        echo "Error: Could not execute the UPDATE statement.";
+                    }
+                    mysqli_stmt_close($stmt2);
+                } else {
+                    echo "Error: Could not prepare the UPDATE statement.";
+                }
             } else {
-                echo "Error: Could not execute the delete statement.";
+                echo "Error: Could not execute the DELETE statement.";
             }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
+            mysqli_stmt_close($stmt1);
         } else {
-            echo "Error: Could not prepare the delete statement.";
+            echo "Error: Could not prepare the DELETE statement.";
         }
     } else {
         echo "Error: Missing or invalid movie_id.";
     }
-
-    // Close connection
     mysqli_close($link);
 } else {
-    // Check for movie_id in the GET request
     if (isset($_GET["movie_id"]) && !empty(trim($_GET["movie_id"]))) {
         $movie_id = trim($_GET["movie_id"]);
     } else {
-        // Redirect to error page
         header("location: error.php");
         exit();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
